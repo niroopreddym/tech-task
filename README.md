@@ -1,4 +1,4 @@
-# tech-task
+# Tech-task
 As part of the recruitment process we want to know how you think, code and structure your work. In order to do that, we're going to ask you to complete this coding challenge.  
 
 
