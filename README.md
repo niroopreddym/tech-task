@@ -34,3 +34,17 @@ Provide adequate test coverage for this simple service
   - Address 
 - Get the Account By ID 
 
+
+## for database migration use 
+- https://github.com/golang-migrate/migrate 
+
+## Must Have 
+- Unit/Integration Testing 
+- Logging 
+- Error Handling 
+- API Working as Expected
+
+## Nice to have 
+- Configuration & Secret Management 
+- Tracing & Monitoring
+
