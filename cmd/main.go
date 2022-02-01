@@ -48,10 +48,12 @@ func main() {
 	router.Handle("/account/{id}", http.HandlerFunc(handler.GetAccountDetails)).Methods("GET")
 
 	//-------------------------prometheous endpoints--------------------
+	promMiddleware := middleware.PrometheusMiddleware
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("../static/")))
-	router.Path("/prometheus").Handler(promhttp.Handler())
+	router.Handle("/metrics", promhttp.Handler()).Methods("GET")
 	//--------------------------------------------------------------------
 
+	router.Use(promMiddleware)
 	loggedRouter := loggingMiddleware(router)
 	if err := http.ListenAndServe(":9294", loggedRouter); err != nil {
 		logger.Log("status", "fatal", "err", err)
