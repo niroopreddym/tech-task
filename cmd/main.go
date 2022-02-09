@@ -10,7 +10,7 @@ import (
 
 	stdlog "log"
 
-	log "github.com/go-kit/kit/log"
+	log "github.com/go-kit/log"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/suprageeks/tech-task/middleware"
@@ -49,11 +49,12 @@ func main() {
 
 	//-------------------------prometheous endpoints--------------------
 	promMiddleware := middleware.PrometheusMiddleware
+	router.Use(promMiddleware)
+
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("../static/")))
 	router.Handle("/metrics", promhttp.Handler()).Methods("GET")
 	//--------------------------------------------------------------------
 
-	router.Use(promMiddleware)
 	loggedRouter := loggingMiddleware(router)
 	if err := http.ListenAndServe(":9294", loggedRouter); err != nil {
 		logger.Log("status", "fatal", "err", err)

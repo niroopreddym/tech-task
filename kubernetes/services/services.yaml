@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+spec:
+  selector:
+    app: api
+# This defines which pods are going to be spinned up as par of this service and expose ports as well.
+  ports:
+    - name: httptraffic # any name
+      port: 9294
+      nodePort: 39294 # should always be > 30,000 we can have targetPort for internal use cluster
+  type: NodePort # cane ClusterIP as well for private access within cluster
+   
+---
+apiVersion : v1
+kind: Service
+metadata:
+  name: app
+spec:
+  selector:
+    app: db
+  ports:
+    - name: httptraffic
+      port: 5432
+      nodePort: 35432
+  type: NodePort
+  

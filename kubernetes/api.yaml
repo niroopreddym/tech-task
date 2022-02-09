@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  minReadySeconds: 30
+  replicas: 2
+  template: # template for the pods
+    metadata:
+      labels:
+        app: api # can be any key value pair
+    spec:
+      containers:
+      - name: api
+        image: niroopreddy/dssapi:v1
+  selector:
+    matchLabels:
+       app: api

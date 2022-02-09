@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment        # Type of Kubernetes resource
+metadata:
+  name: db
+spec:
+  minReadySeconds: 30
+  replicas: 1
+  template: # template for the pods
+    metadata:
+      labels:
+        app: db # can be any key value pair
+    spec:
+      containers:
+      - name: db
+        image: postgres
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: test-volume
+      volumes:
+      - name: test-volume
+
+  selector:
+    matchLabels:
+       app: db
+
+  
