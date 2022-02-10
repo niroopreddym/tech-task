@@ -3,7 +3,6 @@ kind: Deployment        # Type of Kubernetes resource
 metadata:
   name: db
 spec:
-  minReadySeconds: 30
   replicas: 1
   template: # template for the pods
     metadata:
@@ -12,17 +11,20 @@ spec:
     spec:
       containers:
       - name: db
-        image: postgres
+        image: postgres:10.4
+        imagePullPolicy: "IfNotPresent"
         ports:
           - containerPort: 5432
+        envFrom:
+          - configMapRef:
+              name: postgres-config
         volumeMounts:
-        - mountPath: /var/lib/postgresql/data
-          name: test-volume
+          - mountPath: /var/lib/postgresql/data
+            name: test-volume
       volumes:
       - name: test-volume
-
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim
   selector:
     matchLabels:
-       app: db
-
-  
+      app: db
