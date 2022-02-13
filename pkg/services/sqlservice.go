@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"strconv"
 
 	"github.com/google/uuid"
 	"github.com/suprageeks/tech-task/pkg/database"
@@ -38,9 +39,11 @@ func (service *DatabaseService) PostBankDetails(bankDetails *models.Bank) (*stri
 }
 
 //ListAllBanks retrives all bank records from DB
-func (service *DatabaseService) ListAllBanks() ([]*models.Bank, error) {
+func (service *DatabaseService) ListAllBanks(pageNumber int) ([]*models.Bank, error) {
 	defer service.DatabaseService.DbClose()
-	query := "select * from Bank"
+	pagelimit := 1
+
+	query := "select * from Bank limit " + strconv.Itoa(pagelimit) + "offset " + strconv.Itoa(pagelimit*(pageNumber-1))
 	tx, err := service.DatabaseService.TxBegin()
 	rowsAffected, err := service.DatabaseService.TxQuery(tx, query)
 	if err != nil {

@@ -19,6 +19,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/main.go
 FROM alpine:3.11.3
 COPY --from=builder /app/main .
 # Expose port 9000 to the outside world
-EXPOSE 9000
+EXPOSE 9294
 # executable
 ENTRYPOINT [ "./main" ]

@@ -2,7 +2,12 @@ apiVersion: apps/v1
 kind: Deployment        # Type of Kubernetes resource
 metadata:
   name: db
+  labels:            # Labels that will be applied to this resource
+    app: db
 spec:
+  selector:
+    matchLabels:
+      app: db
   replicas: 1
   template: # template for the pods
     metadata:
@@ -15,16 +20,21 @@ spec:
         imagePullPolicy: "IfNotPresent"
         ports:
           - containerPort: 5432
-        envFrom:
-          - configMapRef:
-              name: postgres-config
-        volumeMounts:
-          - mountPath: /var/lib/postgresql/data
-            name: test-volume
-      volumes:
-      - name: test-volume
-        persistentVolumeClaim:
-          claimName: postgres-pv-claim
-  selector:
-    matchLabels:
-      app: db
+# ---------------------
+
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: testnamespace
+
+# ----------------------
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: testnamespace
+  name: poststarthook
+data:
+  poststart.sh: |
+     #!/bin/bash
+     echo "It`s done"

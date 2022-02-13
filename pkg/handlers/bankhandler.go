@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -64,7 +65,8 @@ func (handler *BankAndAccountHandler) CreateBank(w http.ResponseWriter, r *http.
 
 //GetAllBanks gets all banks from DB
 func (handler *BankAndAccountHandler) GetAllBanks(w http.ResponseWriter, r *http.Request) {
-	lstBanks, err := handler.DatabaseService.ListAllBanks()
+	pageNumber, _ := strconv.Atoi(r.URL.Query().Get("pagenumber"))
+	lstBanks, err := handler.DatabaseService.ListAllBanks(pageNumber)
 	if err != nil {
 		log.Println(err)
 		responseController(w, http.StatusInternalServerError, "Error occured while fetch the userdetails")
@@ -169,6 +171,7 @@ func postRequestBodyInitialValidation(bankDetails models.Bank, errorMessages *[]
 
 func responseController(w http.ResponseWriter, code int, payload interface{}) {
 	response, _ := json.Marshal(payload)
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
 	w.Write(response)

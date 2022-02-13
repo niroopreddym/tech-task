@@ -37,7 +37,7 @@ func main() {
 	//---------------------------------------------------
 	router := mux.NewRouter()
 	handler := handlers.NewBankAndAccountsHandlerInstance()
-	fmt.Println("started listening on port : ", 9294)
+	fmt.Println("started listening on port : ", 9295)
 	router.Handle("/bank", http.HandlerFunc(handler.CreateBank)).Methods("POST")
 	router.Handle("/bank", http.HandlerFunc(handler.GetAllBanks)).Methods("GET")
 	router.Handle("/bank/{id}", http.HandlerFunc(handler.GetBankDetails)).Methods("GET")
@@ -56,7 +56,7 @@ func main() {
 	//--------------------------------------------------------------------
 
 	loggedRouter := loggingMiddleware(router)
-	if err := http.ListenAndServe(":9294", loggedRouter); err != nil {
+	if err := http.ListenAndServe(":9295", loggedRouter); err != nil {
 		logger.Log("status", "fatal", "err", err)
 	}
 

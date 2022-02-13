@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"log"
+	"os"
 
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v4"
@@ -35,6 +36,14 @@ func SetConnectionStrings() {
 	// "server=192.168.99.100 port=5432 user=postgres password=postgres sslmode=disable dbname=testdb"
 	ReaderConnectionString = "postgres://postgres:postgres@127.0.0.1:5432/postgres"
 	WriterConnectionString = "postgres://postgres:postgres@127.0.0.1:5432/postgres"
+}
+
+func getEnv(key, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
+	}
+	return value
 }
 
 // InitDbReader : for the database at the global space
