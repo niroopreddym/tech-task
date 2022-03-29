@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"
+        integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"
+        integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/1.2.1/chartjs-plugin-zoom.min.js"
+        integrity="sha512-klQv6lz2YR+MecyFYMFRuU2eAl8IPRo6zHnsc9n142TJuJHS8CG0ix4Oq9na9ceeg1u5EkBfZsFcV3U7J51iew=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+              
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- <script>
         function dateTimeChanged() {
@@ -26,10 +35,10 @@
                 </select>
                 <br />
                 <label for="birthdaytime">StartTime:</label>
-                <input type="datetime-local" id="starttime" name="starttime" onchange="dateTimeChanged()">
+                <input type="datetime-local" id="starttime" name="starttime" onchange="dateTimeChanged()" >
                 <br />
                 <label for="birthdaytime">EndTime:</label>
-                <input type="datetime-local" id="birthdaytime2" name="endtime">
+                <input type="datetime-local" id="birthdaytime2" name="endtime" >
                 <br />
                 <label for="interval">Interval:</label>
                 <select name="interval" id="interval" onchange="intervalDropDownClick()" onfocus="this.selectedIndex">
@@ -53,7 +62,7 @@
         function dateTimeChanged(){
             var dstIDValues = document.getElementById('starttime');
             startTime = dstIDValues.value;
-            alert(startTime)
+            // alert(startTime)
         }
         var indexLabel
         var dstIDDropdown = document.getElementById('dstIds');
@@ -235,44 +244,60 @@
                         watermark, linear, tcf
                     ],
                 },
-                options: {
+             options: {
+                    responsive: true,
                     title: {
                         display: true,
-                        text: 'video file format count'
+                        text: 'Chart.js Zoom each scale separately'
                     },
-                    legend: {
-                        display: true,
-                        position: 'right',
-                        labels: {
-                            fontColor: "#000"
+                //     scales: [{
+                //     title:{
+                //         display: true,
+                //         text:'x-axis'
+                //     }
+                //  }],
+                
+                    plugins: {
+                        title: {
+                            text: 'Video Data Analytics',
+                            display: true
+                        },
+                        zoom: {
+                            pan: {
+                                enabled: true,
+                                mode: 'xy',
+                                overScaleMode: 'y'
+                            },
+                            zoom: {
+                                wheel: {
+                                    enabled: true,
+                                },
+                                pinch: {
+                                    enabled: true,
+                                },
+                                mode: 'xy',
+                                overScaleMode: 'y'
+                            }
                         }
                     },
-                    tooltips: {
-                        enabled: true
+                     scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Dsid Count'
+                            }
+                        }
                     },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            },
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Dsid Count'
-                            }
-                        }],
-                        xAxes: [{
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Interval'
-                            }
-                        }]
-                    }
                 }
-            })
-
+            });
 
         }
-
     </script>
 </body>
 
