@@ -1,13 +1,279 @@
-<html>
+<html lang="en">
 
 <head>
-    <title>Hello server</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- <script>
+        function dateTimeChanged() {
+                var dstIDValues = document.getElementById('birthdaytime');
+                var value = dstIDValues.value;
+                console.log(value)
+            }
+    </script> -->
+    <title>Test Chart.js</title>
 </head>
 
 <body>
-    <div>
-        <h1>Hello World!</h1>
+    <div class="container" id="container" style="  width: 100%;  display: flex;">
+        <div id="left" style=" width: 50%;  display: flex;">
+            <div class="container" >
+                <label for="source IDs">Choose a Src ID:</label>
+                <select name="dstIds" id="dstIds" onchange="dropDownClick()" onfocus="this.selectedIndex">
+                    <option>Choose a dataset</option>
+                </select>
+                <br />
+                <label for="birthdaytime">StartTime:</label>
+                <input type="datetime-local" id="starttime" name="starttime" onchange="dateTimeChanged()">
+                <br />
+                <label for="birthdaytime">EndTime:</label>
+                <input type="datetime-local" id="birthdaytime2" name="endtime">
+                <br />
+                <label for="interval">Interval:</label>
+                <select name="interval" id="interval" onchange="intervalDropDownClick()" onfocus="this.selectedIndex">
+                    <option>Choose an interval</option>
+                </select>
+            </div>
+        </div>
+        <div style=" width: 50%; height: 40px;  display: flex;">
+            <input type="button" value="total" onClick="btnClick()" />
+        </div>
     </div>
+    <br />
+    <div class="container" id="right">
+        <canvas id="myChart">
+
+        </canvas>
+    </div>
+
+    <script>
+        var startTime
+        function dateTimeChanged(){
+            var dstIDValues = document.getElementById('starttime');
+            startTime = dstIDValues.value;
+            alert(startTime)
+        }
+        var indexLabel
+        var dstIDDropdown = document.getElementById('dstIds');
+        //arr get the dsids
+        arr = ["abc", "bcd", "def", "abf", "ufw"];
+
+        {
+            {/* array.push({dsids: ["abc", "bcd", "def", "abf", "ufw"]})
+        array.push({ source: 'watermarks', dsidCount: [1, 5, 4, 8, 9], totalDsidCount: 27 });
+        array.push({ source: 'linear', dsidCount: [8, 3, 9, 5, 2], totalDsidCount: 27 });
+        array.push({ source: 'tcf', dsidCount: [6, 3, 5, 0, 10], totalDsidCount: 24 }); */}
+        }
+
+        for (var i = 0; i < arr.length; i++) {
+            var opt = arr[i];
+            var el = document.createElement("option");
+            el.textContent = opt;
+            el.value = opt;
+            dstIDDropdown.appendChild(el);
+        }
+
+        var dataSet
+        function checkLabel(age) {
+            return age > 18;
+        }
+
+        function btnClick() {
+            let watermarkData = 0
+            let tcfData = 0
+            let linearData = 0
+            dataObjects.forEach((element) => {
+                watermarkData = watermarkData + element.data[0];
+                linearData = linearData + element.data[1];
+                tcfData = tcfData + element.data[2];
+            });
+
+            dataSet = {
+                label: "totaldata",
+                data: [watermarkData, linearData, tcfData],
+                backgroundColor: ['magenta', 'maroon', 'cyan'],
+                borderWidth: 4,
+                borderColor: '#777',
+                hiverBorderWidth: "#000"
+            }
+
+            populateChart(dataSet)
+        }
+
+
+        function dropDownClick() {
+            var dstIDValues = document.getElementById('dstIds');
+            var value = dstIDValues.options[dstIDValues.selectedIndex].text;
+            indexLabel = value;
+            dataSet = dataObjects.find(o => o.label === value)
+            populateChart()
+            return
+        }
+
+       
+
+        //get it like @dataobject
+        var dataObjects = [
+            {
+                label: "abc",
+                data: [1, 8, 6],
+                backgroundColor: ['magenta', 'maroon', 'cyan'],
+                borderWidth: 4,
+                borderColor: '#777',
+                hiverBorderWidth: "#000"
+            },
+            {
+                label: "bcd",
+                data: [5, 3, 3],
+                backgroundColor: ['magenta', 'maroon', 'cyan'],
+                borderWidth: 4,
+                borderColor: '#777',
+                hiverBorderWidth: "#000"
+            },
+            {
+                label: "def",
+                data: [4, 9, 5],
+                backgroundColor: ['magenta', 'maroon', 'cyan'],
+                borderWidth: 4,
+                borderColor: '#777',
+                hiverBorderWidth: "#000"
+            },
+            {
+                label: "abf",
+                data: [8, 5, 0],
+                backgroundColor: ['magenta', 'maroon', 'cyan'],
+                borderWidth: 4,
+                borderColor: '#777',
+                hiverBorderWidth: "#000"
+            },
+            {
+                label: "ufw",
+                data: [9, 2, 10],
+                backgroundColor: ['magenta', 'maroon', 'cyan'],
+                borderWidth: 4,
+                borderColor: '#777',
+                hiverBorderWidth: "#000"
+            }
+        ]
+
+
+
+        var barChart = null
+        Date.prototype.addHours = function (h) {
+                this.setHours(this.getHours() + h);
+                return this;
+        }
+
+        function populateChart() {
+            if (barChart != null) {
+                barChart.destroy();
+            }
+
+
+            let myChart = document.getElementById('myChart').getContext('2d');
+            let watermark = {
+                label: "Watermark",
+                data: [24741, 24077, 21264, 17284, 16038, 17407, 19711, 21719, 22063, 21918, 22417, 11477],
+                fill: false,
+                borderColor: "#bae755",
+                borderDash: [5, 5],
+                backgroundColor: "#e755ba",
+                pointBackgroundColor: "#55bae7",
+                pointBorderColor: "#55bae7",
+                pointHoverBackgroundColor: "#55bae7",
+                pointHoverBorderColor: "#55bae7",
+            }
+
+             let linear = {
+                label: "Linear",
+                data: [43179, 41597, 38468, 35389, 35037, 35816, 37448, 39112, 39379, 39502, 40009, 20293],
+                 fill: false,
+                 borderColor: "orange",
+                 borderDash: [5, 5],
+                 backgroundColor: "grey",
+                 pointBackgroundColor: "blue",
+                 pointBorderColor: "blue",
+                 pointHoverBackgroundColor: "blue",
+                 pointHoverBorderColor: "blue",
+            }
+
+            let tcf = {
+                label: "TCF",
+                data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fill: false,
+                borderColor: "black",
+                borderDash: [5, 5],
+                backgroundColor: "black",
+                pointBackgroundColor: "black",
+                pointBorderColor: "black",
+                pointHoverBackgroundColor: "black",
+                pointHoverBorderColor: "black",
+            }
+
+            lstLabels = []
+
+            startTime = document.getElementById('starttime')
+            startTimeValue = startTime.value
+
+            for (var key in watermark){
+                var dateStart = new Date(startTimeValue)
+                var datestring = ("0" + dateStart.getDate()).slice(-2) + "-" + ("0" + (dateStart.getMonth() + 1)).slice(-2) + "-" +
+                    dateStart.getFullYear() + " " + ("0" + dateStart.getHours()).slice(-2) + ":" + ("0" + dateStart.getMinutes()).slice(-2);
+
+                lstLabels.push(datestring)
+                startTimeValue = dateStart.addHours(2)
+            }
+
+            barChart = new Chart(myChart, {
+                type: 'line', //bar, horizontalBar, pie, line, doughnut, radar , polararea
+                data: {
+                    // labels: ['0-2hr', '2-4hr', '4-6hr', '6-8hr', '8-10hr', '10-12hr', '12-14hr', '14-16hr', '16-18hr', '18-20hr', '20-22hr', '22-24hr'],
+                    labels: lstLabels,
+                    datasets: [
+                        watermark, linear, tcf
+                    ],
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'video file format count'
+                    },
+                    legend: {
+                        display: true,
+                        position: 'right',
+                        labels: {
+                            fontColor: "#000"
+                        }
+                    },
+                    tooltips: {
+                        enabled: true
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Dsid Count'
+                            }
+                        }],
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Interval'
+                            }
+                        }]
+                    }
+                }
+            })
+
+
+        }
+
+    </script>
 </body>
+
 </html>
